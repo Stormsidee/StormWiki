@@ -1,0 +1,57 @@
+{% extends 'index.html' %}
+
+{% block title %}{% if form.instance.id %}Редактировать{% else %}Создать{% endif %} статью - Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if form.instance.id %}Редактировать статью{% else %}Создать новую статью{% endif %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Заголовок</label>
+                        {{ form.title }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_content" class="form-label">Содержание</label>
+                        {{ form.content }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_tags" class="form-label">Теги (через запятую)</label>
+                        {{ form.tags }}
+                        <div class="form-text">Например: python, django, web</div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Сохранить
+                        </button>
+                        <a href="" class="btn btn-secondary">
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Простой редактор текста
+document.addEventListener('DOMContentLoaded', function() {
+    const contentTextarea = document.getElementById('id_content');
+    if (contentTextarea) {
+        contentTextarea.style.minHeight = '300px';
+    }
+});
+</script>
+{% endblock %}
