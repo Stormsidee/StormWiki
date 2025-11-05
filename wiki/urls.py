@@ -20,8 +20,17 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.article_list),
+    path('', views.article_list, name="article_list"),
     path('article/<int:pk>/', views.article_detail, name='article_detail'),
+    path('article/new/', views.article_create, name='article_create'),
+    path('article/<int:pk>/edit/', views.article_edit, name='article_edit'),
+    path('article/<int:pk>/delete/', views.article_delete, name='article_delete'),
+
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+
+    path('my-articles/', views.my_articles, name='my_articles'),
     path('article/new/', views.article_create, name='article_create'),
     path('article/<int:pk>/edit/', views.article_edit, name='article_edit'),
     path('article/<int:pk>/delete/', views.article_delete, name='article_delete'),
