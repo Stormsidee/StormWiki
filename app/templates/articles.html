@@ -7,9 +7,9 @@
         <div class="card gradient-bg text-white">
             <div class="card-body text-center py-4">
                 <h1 class="display-6 fw-bold">
-                    <i class="fas fa-brain me-2"></i>База знаний
+                    <i class="fas fa-brain me-2"></i>Storm Wiki
                 </h1>
-                <p class="lead mb-0">Собирай и систематизируй свои знания в одном месте</p>
+                <p class="lead mb-0">Сообщество знаний - учитесь и делитесь опытом</p>
             </div>
         </div>
     </div>
@@ -17,37 +17,148 @@
 
 <div class="row">
     <div class="col-md-8">
-        <!-- Остальной код списка статей остается таким же -->
+        <!-- Информация о поиске/фильтрации -->
+        {% if query or tag_filter %}
+        <div class="alert alert-info mb-3">
+            {% if query and tag_filter %}
+            <i class="fas fa-filter me-2"></i>Результаты поиска по "{{ query }}" и тегу "{{ tag_filter }}"
+            {% elif query %}
+            <i class="fas fa-search me-2"></i>Результаты поиска по "{{ query }}"
+            {% elif tag_filter %}
+            <i class="fas fa-tag me-2"></i>Статьи с тегом "{{ tag_filter }}"
+            {% endif %}
+            <a href="{% url 'article_list' %}" class="btn btn-sm btn-outline-info ms-3">
+                <i class="fas fa-times me-1"></i>Сбросить
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Список статей -->
         {% if articles %}
             {% for article in articles %}
             <div class="card article-card mb-3 fade-in">
-                <!-- ... существующий код карточки ... -->
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h5 class="card-title">
+                                <a href="{% url 'article_detail' article.id %}" class="text-decoration-none text-dark">
+                                    {{ article.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted">
+                                {{ article.content|striptags|truncatewords:30 }}
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="article-meta">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>{{ article.author.username }}
+                                        <i class="fas fa-calendar ms-2 me-1"></i>{{ article.updated_at|date:"d.m.Y H:i" }}
+                                    </small>
+                                </div>
+                                <div class="tags">
+                                    {% for tag in article.tags.all %}
+                                    <a href="{% url 'article_list' %}?tag={{ tag.name }}" class="badge tag me-1 text-decoration-none">
+                                        #{{ tag.name }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         {% else %}
-            <!-- ... существующий код пустого состояния ... -->
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">
+                    {% if query or tag_filter %}
+                    Статьи не найдены
+                    {% else %}
+                    Пока нет статей
+                    {% endif %}
+                </h4>
+                <p class="text-muted">
+                    {% if query or tag_filter %}
+                    Попробуйте изменить параметры поиска
+                    {% else %}
+                    Будьте первым, кто поделится знаниями!
+                    {% endif %}
+                </p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'article_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Создать первую статью
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i>Зарегистрируйтесь чтобы создать статью
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Пагинация -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if tag_filter %}&tag={{ tag_filter }}{% endif %}">
+                        <i class="fas fa-chevron-left me-1"></i>Назад
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if tag_filter %}&tag={{ tag_filter }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if tag_filter %}&tag={{ tag_filter }}{% endif %}">
+                        Вперед<i class="fas fa-chevron-right ms-1"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
         {% endif %}
     </div>
     
     <!-- Боковая панель -->
     <div class="col-md-4">
+        <!-- Фильтр по тегам -->
         <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры</h5>
             </div>
             <div class="card-body">
                 <h6>Популярные теги:</h6>
-                {% for tag in all_tags %}
-                <a href="{% url 'article_list' %}?tag={{ tag.name }}" 
-                   class="badge tag me-1 mb-1 text-decoration-none">
-                    #{{ tag.name }}
-                </a>
-                {% endfor %}
+                <div class="tags-cloud">
+                    {% for tag in all_tags %}
+                    <a href="{% url 'article_list' %}?tag={{ tag.name }}" 
+                       class="badge tag me-1 mb-1 text-decoration-none">
+                        #{{ tag.name }}
+                    </a>
+                    {% empty %}
+                    <p class="text-muted small">Тегов пока нет</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         
+        <!-- Быстрые действия -->
         {% if user.is_authenticated %}
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Быстрые действия</h5>
             </div>
@@ -61,11 +172,25 @@
             </div>
         </div>
         {% endif %}
+
+        <!-- Статистика -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Статистика</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-primary">{{ articles.paginator.count }}</h4>
+                        <small class="text-muted">Статей</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">{{ all_tags.count }}</h4>
+                        <small class="text-muted">Тегов</small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<!-- Пагинация -->
-{% if is_paginated %}
-<!-- ... существующий код пагинации ... -->
-{% endif %}
 {% endblock %}

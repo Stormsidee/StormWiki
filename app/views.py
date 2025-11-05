@@ -146,9 +146,11 @@ def my_articles(request):
 
 # Эти views остаются публичными
 def article_list(request):
-    """Список статей с поиском и фильтрацией"""
-    articles = Article.objects.filter(is_published=True)
+    """Список ВСЕХ опубликованных статей с поиском и фильтрацией"""
+    # Берем ВСЕ опубликованные статьи, независимо от автора
+    articles = Article.objects.filter(is_published=True).select_related('author').prefetch_related('tags')
     
+    # Поиск
     query = request.GET.get('q')
     if query:
         articles = articles.filter(
@@ -157,14 +159,20 @@ def article_list(request):
             Q(tags__name__icontains=query)
         ).distinct()
     
+    # Фильтрация по тегу
     tag_filter = request.GET.get('tag')
     if tag_filter:
         articles = articles.filter(tags__name=tag_filter)
     
+    # Сортировка по дате обновления (новые сверху)
+    articles = articles.order_by('-updated_at')
+    
+    # Пагинация
     paginator = Paginator(articles, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Все теги для фильтра
     all_tags = Tag.objects.all()
     
     context = {
