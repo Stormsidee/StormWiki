@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--6j=*wstz--r%8v$62jd+g(f^=m(gdq)9nh#c#yhgs8egpj40a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stormvpn.work.gd']
 
 # Application definition
 
