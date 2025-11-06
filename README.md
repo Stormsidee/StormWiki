@@ -2,7 +2,7 @@
 
 
 ## About
-- My first web application is based on Django + Python, I am actively studying this framework, do not judge strictly <3
+- My first web application on Django + Python, I am actively studying this framework, do not judge strictly <3
 
 
 ## Start Docker
