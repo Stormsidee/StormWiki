@@ -1,9 +1,5 @@
 FROM python:3.14.0
 
-RUN apt-get update && apt-get install -y \
-    postgresql-dev \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
