@@ -31,6 +31,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost']
 
