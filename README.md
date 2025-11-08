@@ -7,7 +7,7 @@
 
 ## Start Docker
 ```bash
-in process
+docker-compose up -d --build
 ```
 
 ## Start on Linux
