@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'wiki.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGORINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
