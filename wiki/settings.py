@@ -31,7 +31,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost']
 
@@ -55,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'wiki.urls'
@@ -138,5 +136,3 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
