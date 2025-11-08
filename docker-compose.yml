@@ -16,8 +16,7 @@ services:
       - media_volume:/app/media
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn your_project.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+             gunicorn wiki.wsgi:application --bind 0.0.0.0:8000 --workers 3"
 
   db:
     image: postgres:13
