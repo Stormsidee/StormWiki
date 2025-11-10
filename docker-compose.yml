@@ -4,10 +4,17 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=True
+      - DEBUG=False
       - SECRET_KEY=nGn1dqu2pLb16CBYrO6Yb8tM4QX7k_IRNG_1CPjYcA-fFtDDVBpSRen6ShJJaUonXpA
     volumes:
       - .:/app
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
+  fastapi:
+    build: .
+    ports:
+      - "7000:7000"
+    volumes:
+      - .:/app
+    command: python start.py
