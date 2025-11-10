@@ -1,22 +1,22 @@
 # StormWiki (Python + Django)
 
 
-## About
+## 📌 About
 - My first web application on Django + Python, I am actively studying this framework, do not judge strictly <3
 
 
-## Start Docker
+## ✈️ Start Docker
 ```bash
 docker-compose up -d --build
 ```
 
-## Start on Linux
+## ✈️ Start on Linux
 ```bash
 chmod +x start.sh
 ./start.sh
 ```
 
-## How to use API
+## ⚙️ How to use API
 ```bash
 #GET /articles/ - This get all articles on site
 #GET /tags/ - This get all used tags on site
