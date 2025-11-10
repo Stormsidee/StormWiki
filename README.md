@@ -8,6 +8,8 @@
 
 ## ✈️ Quick Start
 ------------------------------------
+> Frontend work on 8000 port
+
 ## Docker
 ```bash
 docker-compose up -d --build
@@ -21,6 +23,7 @@ chmod +x start.sh
 ------------------------------------
 ## ⚙️ How to use API
 ```bash
+API work on 7000 port (example 127.0.0.1:7000/tags/)
 #GET /articles/ - This get all articles on site
 #GET /tags/ - This get all used tags on site
 #GET /users/ - This get all users
