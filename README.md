@@ -15,3 +15,10 @@ docker-compose up -d --build
 chmod +x start.sh
 ./start.sh
 ```
+
+## 🛠 Technology stack
+```bash
+- Python 3.14, Django
+- SQLite
+- Docker, Docker-compose
+```
