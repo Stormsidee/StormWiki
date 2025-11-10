@@ -4,6 +4,8 @@
 # 📌 About
 - My first web application on Django + Python, I am actively studying this framework, do not judge strictly <3
 
+
+
 ## ✈️ Quick Start
 ------------------------------------
 ## Docker
