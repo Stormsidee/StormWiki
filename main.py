@@ -18,31 +18,20 @@ app = FastAPI(
     version="1.0"
 )
 
+class ArticleDelete(BaseModel):
+    article_id: int
+
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
 class ArticleCreate(BaseModel):
     title: str
     content: str
     author_username: str 
     tag_names: Optional[List[str]] = []
     is_published: bool = True
-
-def serialize_article(article):
-    return {
-        "id": article.id,
-        "title": article.title,
-        "content": article.content,
-        "author": {
-            "id": article.author.id,
-            "username": article.author.username,
-            "email": article.author.email
-        },
-        "tags": [
-            {"id": tag.id, "name": tag.name} 
-            for tag in article.tags.all()
-        ],
-        "created_at": article.created_at.isoformat(),
-        "updated_at": article.updated_at.isoformat(),
-        "is_published": article.is_published
-    }
 
 
 @app.get('/')
@@ -88,10 +77,35 @@ def create_article(article_data: ArticleCreate):
             
             article.tags.set(tags_to_add)
         
-        return serialize_article(article)
+        return {
+            "id": article.id,
+            "title": article.title,
+            "content": article.content,
+            "author": {
+                "id": author.id,
+                "username": author.username,
+                "email": author.email
+            },
+            "tags": [
+                {"id": tag.id, "name": tag.name} 
+                for tag in article.tags.all()
+            ],
+            "created_at": article.created_at.isoformat(),
+        }
         
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@app.post('/articles/delete/')
+def delete_article(article_data: ArticleDelete):
+    try:
+        article = Article.objects.get(id=article_data.article_id)
+        article.delete()
+        return {"message": f"Article with id {article_data.article_id} deleted successfully."}
+    except Article.DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"Article with id {article_data.article_id} not found.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
@@ -99,6 +113,24 @@ def create_article(article_data: ArticleCreate):
 def get_users():
     users = list(User.objects.filter(is_active=True).values('id', 'username', 'email'))
     return {"users": users}
+
+@app.post('/users/create/')
+def create_user(user_data: UserCreate):
+    if User.objects.filter(username=user_data.username).exists():
+        raise HTTPException(status_code=400, detail="Username already exists")
+    
+    user = User.objects.create_user(
+        username=user_data.username, 
+        email=user_data.email, 
+        password=user_data.password
+        )
+
+    return {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "message": "User created successfully"
+    }
 
 @app.get('/tags/')
 def get_tags():
