@@ -38,7 +38,7 @@ chmod +x start.sh
 #GET /tags/ - This get all used tags on site
 #GET /users/ - This get all users
 ```
-# /articles/create/ [POST]
+## /articles/create/ [POST]
 ```bash
 {
   "title":"example",
@@ -47,13 +47,13 @@ chmod +x start.sh
   "tags":["test","FastAPI","example"]
 }
 ```
-# /articles/delete/ [POST]
+## /articles/delete/ [POST]
 ```bash
 {
   "article_id":5 <- here is any article ID
 }
 ```
-# /users/create/ [POST]
+## /users/create/ [POST]
 ```bash
 {
   "username":"example",
