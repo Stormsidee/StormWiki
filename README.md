@@ -3,6 +3,14 @@
 
 # 📌 About
 - My first web application on Django + Python + FastAPI, I am actively studying this framework, do not judge strictly <3
+## 🛠 Technology stack
+```bash
+- Python 3.14
+- Django
+- FastAPI
+- SQLite
+- Docker, Docker-compose
+```
 
 
 
@@ -21,15 +29,7 @@ chmod +x start.sh
 ./start.sh
 ```
 ------------------------------------
-## 🛠 Technology stack
-```bash
-- Python 3.14
-- Django
-- FastAPI
-- SQLite
-- Docker, Docker-compose
-```
-------------------------------------
+
 ## ⚙️ How to use API
 > API work on 7000 port (example 127.0.0.1:7000/tags/)
 
